@@ -1,0 +1,11 @@
+---
+- hosts: all
+  remote_user: keith
+
+  tasks:
+    - name: install
+      apt:
+        name: yarn
+        state: present
+        update_cache: true
+      become: true
