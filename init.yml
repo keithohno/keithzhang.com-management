@@ -3,9 +3,29 @@
   remote_user: keith
 
   tasks:
-    - name: install
+
+    - git:
+        repo: https://github.com/keithohno/keithzhang.com-management.git
+        dest: /home/keith/keithzhang.com-management
+        force: yes
+
+    - git:
+        repo: https://github.com/keithohno/keithzhang.com.git
+        dest: /home/keith/keithzhang.com
+        force: yes
+        
+    - name: chmod init script
+      file: dest=/home/keith/keithzhang.com-management/host/init.sh mode=a+x
+
+    - name: add yarn repo
+      command: ./init.sh
+      args:
+        chdir: /home/keith/keithzhang.com-management/host
+
+    - name: install yarn
       apt:
         name: yarn
         state: present
         update_cache: true
       become: true
+
