@@ -8,14 +8,12 @@
         repo: https://github.com/keithohno/keithzhang.com-management.git
         dest: /home/keith/keithzhang.com-management
         force: yes
-
-    - git:
-        repo: https://github.com/keithohno/keithzhang.com.git
-        dest: /home/keith/keithzhang.com
-        force: yes
         
     - name: chmod init script
       file: dest=/home/keith/keithzhang.com-management/host/init.sh mode=a+x
+
+    - name: chmod deploy script
+      file: dest=/home/keith/keithzhang.com-management/host/deploy.sh mode=a+x
 
     - name: add yarn repo
       command: ./init.sh
@@ -27,5 +25,10 @@
         name: yarn
         state: present
         update_cache: true
+      become: true
+
+    - name: install nginx
+      apt:
+        name: nginx
       become: true
 

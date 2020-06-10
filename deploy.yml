@@ -1,0 +1,26 @@
+---
+- hosts: all
+  remote_user: keith
+
+  tasks:
+
+    - git:
+        repo: https://github.com/keithohno/keithzhang.com.git
+        dest: /home/keith/keithzhang.com
+        force: yes
+        
+    - name: yarn install
+      command: yarn install
+      args:
+        chdir: /home/keith/keithzhang.com
+
+    - name: yarn build
+      command: yarn build
+      args:
+        chdir: /home/keith/keithzhang.com
+
+    - name: run deploy script
+      command: ./deploy.sh
+      args:
+        chdir: /home/keith/keithzhang.com-management/host
+
