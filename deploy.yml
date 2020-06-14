@@ -19,8 +19,8 @@
       args:
         chdir: /home/keith/keithzhang.com
 
-    - name: run deploy script
-      command: ./deploy.sh
-      args:
-        chdir: /home/keith/keithzhang.com-management/host
-
+    - name: restart nginx
+      command: service nginx restart
+      become: yes
+      args: 
+        warn: no
