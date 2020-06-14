@@ -5,11 +5,6 @@
 
   tasks:
 
-    - git:
-        repo: https://github.com/keithohno/keithzhang.com-management.git
-        dest: /home/keith/keithzhang.com-management
-        force: yes
-        
     - name: add yarn repo key
       apt_key:
         url: https://dl.yarnpkg.com/debian/pubkey.gpg
