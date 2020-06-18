@@ -4,20 +4,37 @@
 
   tasks:
 
-    - git:
+    - name: pull keithzhang.com repo
+      git:
         repo: https://github.com/keithohno/keithzhang.com.git
         dest: /home/keith/keithzhang.com
         force: yes
-        
-    - name: yarn install
+
+    - name: yarn install keithzhang.com
       command: yarn install
       args:
         chdir: /home/keith/keithzhang.com
 
-    - name: yarn build
+    - name: yarn build keithzhang.com
       command: yarn build
       args:
         chdir: /home/keith/keithzhang.com
+
+    - name: pull algoshow repo
+      git:
+        repo: https://github.com/keithohno/algoshow.git
+        dest: /home/keith/algoshow
+        force: yes
+        
+    - name: yarn install algoshow
+      command: yarn install
+      args:
+        chdir: /home/keith/algoshow
+
+    - name: yarn build algoshow
+      command: yarn build
+      args:
+        chdir: /home/keith/algoshow
 
     - name: restart nginx
       command: service nginx restart

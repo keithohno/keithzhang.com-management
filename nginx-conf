@@ -1,14 +1,23 @@
 server {
-    listen      80;
+    listen 80;
+    listen 443 ssl;
+
     server_name keithzhang.com;
     charset utf-8;
-    root    /home/keith/keithzhang.com/dist;
-    index   index.html index.htm;
+
+    location /algoshow {
+        alias /home/keith/algoshow/dist/;
+        try_files $uri $uri/ /algoshow/index.html;
+    }
 
     location / {
         root /home/keith/keithzhang.com/dist;
-        try_files $uri /index.html;
+        try_files $uri $uri/ /index.html;
     }
+
+    ssl_certificate /etc/ssl/mycert.crt;
+    ssl_certificate_key /etc/ssl/mycert.key;
+
     error_log  /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
 }

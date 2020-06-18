@@ -4,12 +4,11 @@
   become: true
 
   tasks:
-
     - name: add yarn repo key
       apt_key:
         url: https://dl.yarnpkg.com/debian/pubkey.gpg
         state: present
-      
+
     - name: add yarn repo source (touch)
       file:
         path: /etc/apt/sources.list.d/yarn.list
@@ -18,15 +17,13 @@
     - name: add yarn repo source (write)
       lineinfile:
         path: /etc/apt/sources.list.d/yarn.list
-        line: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        line: "deb https://dl.yarnpkg.com/debian/ stable main"
 
     - name: install packages
       apt:
         name:
           - yarn
           - nginx
-          - certbot
-          - python3-certbot-nginx
         state: present
         update_cache: true
       become: true
@@ -47,7 +44,12 @@
         path: /etc/nginx/sites-enabled/default
         state: absent
 
-    - name: run certbot
-      command: certbot --nginx -d keithzhang.com -n -m keithohno@gmail.com --agree-tos
-      become: yes
+    - name: copy ssl certificate
+      copy:
+        src: keys/certificate.crt
+        dest: /etc/ssl/mycert.crt
 
+    - name: copy ssl key
+      copy:
+        src: keys/private.key
+        dest: /etc/ssl/mycert.key
