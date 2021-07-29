@@ -1,8 +1,52 @@
 ---
 - hosts: all
   remote_user: keith
+  become: true
 
   tasks:
+
+
+    - name: pull whatsfordinner repo
+      git:
+        repo: https://github.com/keithohno/WhatsForDinner.git
+        dest: /home/keith/WhatsForDinner
+        force: yes
+
+    - name: npm install whatsfordinner
+      command: npm install
+      args:
+        chdir: /home/keith/WhatsForDinner/client
+    
+    - name: npm build whatsfordinner
+      command: npm run build
+      args:
+        chdir: /home/keith/WhatsForDinner/client
+
+    - name: whatsfordinner server venv creation
+      command: python3 -m venv env
+      args:
+        chdir: /home/keith/WhatsForDinner/server
+        
+    - name: whatsfordinner server venv pip install
+      pip: 
+        requirements=/home/keith/WhatsForDinner/server/requirements.txt 
+        virtualenv=/home/keith/WhatsForDinner/server/env
+
+    - name: copy mongodb cert
+      copy:
+        src: keys/X509-cert-192195340096089653.pem
+        dest: /home/keith/WhatsForDinner/X509-cert-192195340096089653.pem
+
+    - name: copy systemd config
+      copy:
+        src: whatsfordinner.service
+        dest: /etc/systemd/system/whatsfordinner.service
+
+    - name: start flask waitress service
+      ansible.builtin.systemd:
+        state: started
+        daemon_reload: yes
+        name: whatsfordinner
 
     - name: pull keithzhang.com repo
       git:

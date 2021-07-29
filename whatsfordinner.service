@@ -1,0 +1,13 @@
+[Unit]
+Description=WhatsForDinner daemon
+After=network.target
+
+[Service]
+Type=simple
+User=keith
+WorkingDirectory=/home/keith/WhatsForDinner/server
+ExecStart=/home/keith/WhatsForDinner/server/env/bin/waitress-serve --listen=127.0.0.1:5000 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

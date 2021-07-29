@@ -24,6 +24,10 @@
         name:
           - yarn
           - nginx
+          - git
+          - npm
+          - daemon
+          - python3-venv
         state: present
         update_cache: true
       become: true
@@ -53,3 +57,13 @@
       copy:
         src: keys/private.key
         dest: /etc/ssl/mycert.key
+
+    - name: daemon reload
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: restart nginx
+      command: service nginx restart
+      become: yes
+      args: 
+        warn: no
