@@ -85,3 +85,9 @@
       become: yes
       args: 
         warn: no
+
+    - name: restart nginx
+      command: service whatsfordinner restart
+      become: yes
+      args: 
+        warn: no

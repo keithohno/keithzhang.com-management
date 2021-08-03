@@ -20,6 +20,10 @@ server {
     location /dinner/query {
         proxy_pass http://127.0.0.1:5000/query;
     }
+    
+    location /dinner/querynext {
+        proxy_pass http://127.0.0.1:5000/querynext;
+    }
 
     location /dinner {
         alias /home/keith/WhatsForDinner/client/dist/;
