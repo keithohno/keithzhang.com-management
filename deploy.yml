@@ -4,49 +4,18 @@
   become: true
 
   tasks:
+    - name: install packages
+      apt:
+        name:
+          - nginx
+          - git
+        state: present
+        update_cache: true
 
-
-    - name: pull whatsfordinner repo
-      git:
-        repo: https://github.com/keithohno/WhatsForDinner.git
-        dest: /home/keith/WhatsForDinner
-        force: yes
-
-    - name: npm install whatsfordinner
-      command: npm install
-      args:
-        chdir: /home/keith/WhatsForDinner/client
-    
-    - name: npm build whatsfordinner
-      command: npm run build
-      args:
-        chdir: /home/keith/WhatsForDinner/client
-
-    - name: whatsfordinner server venv creation
-      command: python3 -m venv env
-      args:
-        chdir: /home/keith/WhatsForDinner/server
-        
-    - name: whatsfordinner server venv pip install
-      pip: 
-        requirements=/home/keith/WhatsForDinner/server/requirements.txt 
-        virtualenv=/home/keith/WhatsForDinner/server/env
-
-    - name: copy mongodb cert
+    - name: copy nginx config
       copy:
-        src: keys/X509-cert-192195340096089653.pem
-        dest: /home/keith/WhatsForDinner/X509-cert-192195340096089653.pem
-
-    - name: copy systemd config
-      copy:
-        src: whatsfordinner.service
-        dest: /etc/systemd/system/whatsfordinner.service
-
-    - name: start flask waitress service
-      ansible.builtin.systemd:
-        state: started
-        daemon_reload: yes
-        name: whatsfordinner
+        src: nginx-conf
+        dest: /etc/nginx/sites-available/default
 
     - name: pull keithzhang.com repo
       git:
@@ -54,40 +23,15 @@
         dest: /home/keith/keithzhang.com
         force: yes
 
-    - name: yarn install keithzhang.com
-      command: yarn install
-      args:
-        chdir: /home/keith/keithzhang.com
+    - name: install certbot
+      snap:
+        name: certbot
+        classic: yes
 
-    - name: yarn build keithzhang.com
-      command: yarn build
-      args:
-        chdir: /home/keith/keithzhang.com
-
-    - name: pull algoshow repo
-      git:
-        repo: https://github.com/keithohno/algoshow.git
-        dest: /home/keith/algoshow
-        force: yes
-        
-    - name: yarn install algoshow
-      command: yarn install
-      args:
-        chdir: /home/keith/algoshow
-
-    - name: yarn build algoshow
-      command: yarn build
-      args:
-        chdir: /home/keith/algoshow
+    - name: run certbot
+      command: certbot --nginx --non-interactive --agree-tos -m keith.zhang.cs@gmail.com -d keithzhang.com
 
     - name: restart nginx
-      command: service nginx restart
-      become: yes
-      args: 
-        warn: no
-
-    - name: restart nginx
-      command: service whatsfordinner restart
-      become: yes
-      args: 
-        warn: no
+      service:
+        name: nginx
+        state: restarted

@@ -1,37 +1,12 @@
 
 server {
     listen 80;
-    listen 443 ssl;
 
     server_name keithzhang.com;
     charset utf-8;
 
-    ssl_certificate /etc/ssl/mycert.crt;
-    ssl_certificate_key /etc/ssl/mycert.key;
-
-    error_log  /var/log/nginx/error.log;
-    access_log /var/log/nginx/access.log;
-    
-    location /algoshow {
-        alias /home/keith/algoshow/dist/;
-        try_files $uri $uri/ /algoshow/index.html;
-    }
-    
-    location /dinner/query {
-        proxy_pass http://127.0.0.1:5000/query;
-    }
-    
-    location /dinner/querynext {
-        proxy_pass http://127.0.0.1:5000/querynext;
-    }
-
-    location /dinner {
-        alias /home/keith/WhatsForDinner/client/dist/;
-        try_files $uri $uri/ /dinner/index.html;
-    }
-
     location / {
-        root /home/keith/keithzhang.com/dist;
+        root /home/keith/keithzhang.com/out;
         try_files $uri $uri/ /index.html;
     }
 }
